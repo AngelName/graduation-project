@@ -4,6 +4,8 @@ const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
   async get() {
+    console.log(this.ctx)
+
     let { ctx,service } = this;
     let { current=1,pageSize=10,...searchKey } = ctx.query;
     console.log(searchKey)
@@ -20,7 +22,6 @@ class HomeController extends Controller {
     if(!params.id){
       throw Error("参数必需有id")
     }
-    console.log(params)
     this.ctx.body = await this.service.page.update({...params})
   }
   async add(){

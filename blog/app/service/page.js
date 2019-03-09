@@ -8,15 +8,16 @@ class HomeService extends Service {
     let limit = pageSize*1;
     let offset = (current-1)*pageSize;
     console.log(searchKey)
+    let {content="",title=""} = searchKey
     let body = {}
-    let total = await this.app.mysql.queryOne('select count(*) as total from  blog_page where content like ? or title like ?', [ '%'+searchKey.content+"%",'%'+searchKey.title+"%"]);
-    let data =  await this.app.mysql.query('select * from  blog_page where content like ? or title like ? limit ?,?', [ '%'+searchKey.content+"%",'%'+searchKey.title+"%",offset,limit]);
+    let total = await this.app.mysql.queryOne('select count(*) as total from  blog_page where content like ? or title like ?', [ '%'+content+"%",'%'+title+"%"]);
+    let data =  await this.app.mysql.query('select * from  blog_page where content like ? or title like ? limit ?,?', [ '%'+content+"%",'%'+title+"%",offset,limit]);
     // await this.app.mysql.select(``,{
     //   where:{...searchKey},
     //   limit:limit,
     //   offset:offset,
     // });
-
+    console.log(`select * from  blog_page where content like  %${content}% or title like  %${title}%  limit ${offset},${limit}`)
     body.total = total.total;
     body.data = data;
     return body;

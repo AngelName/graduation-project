@@ -1,0 +1,22 @@
+{
+  "name": "graduation-project",
+  "version": "1.0.0",
+  "description": "博客项目",
+  "main": "none",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rw":"cd ./web && npm start",
+    "rs":"cd ./blog && npm start"
+
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AngelName/graduation-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AngelName/graduation-project/issues"
+  },
+  "homepage": "https://github.com/AngelName/graduation-project#readme"
+}
