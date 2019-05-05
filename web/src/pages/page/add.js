@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import  MarkdownIt from 'markdown-it'
+import MarkdownIt from 'markdown-it'
 import twemoji from 'twemoji'
-import emoji  from 'markdown-it-emoji'
+import emoji from 'markdown-it-emoji'
 import styles from './add.less';
 import imsize from 'markdown-it-imsize'
 import _ from 'lodash'
 import { connect } from 'dva';
-import { Button,Input, Select, Icon } from 'antd'
+import { Button, Input, Select, Icon } from 'antd'
+import request from '@/utils/request';
 const text = `---
 __Advertisement :)__
 
@@ -254,108 +255,151 @@ It converts "HTML", but keep intact partial entries like "xxxHTMLyyy" and so on.
 *here be dragons*
 :::
 `
-@connect(({global})=>({
+@connect(({ global }) => ({
   global
 }))
 export default class add extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.md = new MarkdownIt({
       html: true,
       linkify: true,
       typographer: true
-     });
-     this.md.use(emoji)
-     this.md.use(imsize,{ autofill: true })
-     this.md.renderer.rules.emoji = function(token, idx) {
+    });
+    this.md.use(emoji)
+    this.md.use(imsize, { autofill: true })
+    this.md.renderer.rules.emoji = function (token, idx) {
       return twemoji.parse(token[idx].content);
     };
-       this.state={
-         result : this.md.render(text)
-       }
-       console.log()
-  }
-  componentDidMount = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type:"global/setDisplayFooter",
-      payload:false,
-    })    
-  }
-  componentWillUnmount = () =>{
-    const { dispatch } = this.props;
-    dispatch({
-      type:"global/setDisplayFooter",
-      payload:true,
-    }) 
-  }
-  handleScroll=(type,env)=>{
-  
-    switch(type){
-      case "edit":
-        this.refs.view.scrollTop = this.refs.edit.scrollTop;
-      break;
-      case "view":
-      this.refs.edit.scrollTop = this.refs.view.scrollTop;
-      break;
+    this.state = {
+      result: "",
+      title:"",
+      tags:"",
+      content:""
     }
   }
-  handleEdit = ()=>{
+  componentDidMount = () => {
+    const { dispatch,location } = this.props;
+    console.log(this.props)
+
+    let {state} = location;
+    if(state){
+      let result = this.md.render(state.record.content);
+      this.setState({...state.record,result:result})
+      request("/tags/getByPage",{
+        method:"POST",
+        body:{
+          ...state.record
+        }
+      }).then(res=>{
+        let tag= []
+        if(res.data){
+          res.data.map(item=>{
+            tag.push(item.name)
+          })
+        }
+        this.setState({tags:tag})
+        console.log(tag)
+})
+    }
+
+  }
+  componentWillUnmount = () => {
+    const { dispatch } = this.props;
+
+  }
+  handleScroll = (type, env) => {
+    switch (type) {
+      case "edit":
+        this.refs.view.scrollTop = this.refs.edit.scrollTop;
+        break;
+      case "view":
+        this.refs.edit.scrollTop = this.refs.view.scrollTop;
+        break;
+    }
+  }
+  //编辑
+  handleEdit = () => {
+    this.setState({content:this.refs.edit.value})
     let result = this.md.render(this.refs.edit.value);
-    this.setState({result:result})
+    this.setState({ result: result })
+  }
+  handleChange = (type,args)=>{
+    let state = this.state;
+    state[type]=args
+    this.setState(state)
+  }
+  //提交数据
+  handleSubmit=()=>{
+    let param = {...this.state};
+    let tags = param.tags;
+    delete param.tags
+    delete param.result
+    delete param.update_time
+    request("/page/add",{
+      method:"POST",
+      body:{
+        page:{
+          ...param
+        },
+        tags:tags
+      }
+    })
   }
   render() {
     const children = [];
-for (let i = 10; i < 36; i++) {
-  children.push(<Option key={i.toString(36) + i}>{i.toString(36) + i}</Option>);
-}
+    console.log(this.state)
+
+    const {content} = this.state;
     return (
       <div className={styles.box}>
-      <div className={styles.toolsbar}>
-      <span style={{display:"flex"}} className={styles.title}>
-      <span> 标题  </span>
-      <input defaultValue="title" />
+        <div className={styles.toolsbar}>
+          <span style={{ display: "flex",alignItems:"center",marginRight:"40px" }} className={styles.title}>
+            <div style={{width:"75px"}}> 标题 : </div>
+            <input value={this.state.title} onChange={(e)=>{
+              this.handleChange("title",e.target.value)}}/>
+          </span>
+          <span style={{ display: "flex", }} className={styles.title}>
+            <div style={{width:"75px"}}> 分类 : </div>
+          </span>
+          <span className={styles.tags}>
 
- 
-      </span>
-      <span style={{display:"flex"}} className={styles.title}>标签</span>
-      <span className={styles.tags}>
-   
-      <Select
-         mode="tags"
-         style={{ width: '100%' }}
-         placeholder="Please select"
-         defaultValue={['a10', 'c12']}
-         onChange={console.log}
-        >
-    {children}
-  </Select>
-  </span>
-      {/* <Button icon="save"></Button> */}
-      {/* <Button icon="save" ></Button> */}
-      {/* <Button icon="save" ></Button>
+            <Select
+              mode="tags"
+              style={{ width: '100%' }}
+              placeholder="Please select"
+              value={this.state.tags}
+              onChange={this.handleChange.bind(this,"tags")}
+            >
+              {children}
+            </Select>
+          </span>
+          {/* <Button icon="save"></Button> */}
+          {/* <Button icon="save" ></Button> */}
+          {/* <Button icon="save" ></Button>
       <Button icon="save" ></Button>
       <Button icon="save" ></Button>
       <Button icon="save" ></Button>
       <Button icon="save" ></Button> */}
-      <Button icon="save" ></Button>
-  </div>
-      <div className={styles.container}>
-      
-      <div className={styles.editer} >
-        <textarea ref="edit"
-         onScroll={_.throttle(this.handleScroll.bind(this,"edit"),10)} 
-         defaultValue={text} className={styles.editPanel}
-         onChange={_.throttle(this.handleEdit)}
-        />
+          <Button icon="save" onClick={this.handleSubmit} ></Button>
         </div>
-      <div ref="view" className={styles.viewer} onScroll={_.throttle(this.handleScroll.bind(this,"view"),10)}  dangerouslySetInnerHTML={{__html:this.state.result}} >
-      
-      </div>
-      </div>
+        <div className={styles.container}>
+
+          <div className={styles.editer} >
+            <textarea ref="edit"
+            value={this.state.content}
+              onScroll={_.throttle(this.handleScroll.bind(this, "edit"), 10)}
+              defaultValue={content} className={styles.editPanel}
+              onChange={_.throttle(this.handleEdit)}
+            />
+          </div>
+          <div ref="view" className={styles.viewer} onScroll={_.throttle(this.handleScroll.bind(this, "view"), 10)} dangerouslySetInnerHTML={{ __html: this.state.result }} >
+
+          </div>
+        </div>
 
       </div>
-      
+
     )
   }
 }

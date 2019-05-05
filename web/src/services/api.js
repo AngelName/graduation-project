@@ -4,7 +4,7 @@ import request from '@/utils/request';
 
 export async function queryPageList(params) {
   console.log(stringify(params));
-  return request(`/page/get?${stringify(params)}`,{loading:true});
+  return request(`/page/get?${stringify(params)}`);
 }
 
 export async function queryProjectNotice() {

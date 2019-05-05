@@ -1,101 +1,129 @@
-@baseTextColor:#6c7e6a;
-@baseNavColor:#043226;
+@baseTextColor: #6c7e6a;
+@baseNavColor: #043226;
+
 //home背景
-.bg{
-    width: 100%;
+.bg {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  background-color: #ededed;
+
+  //整个文章部分
+  .page {
+    background-color: #ffffff;
+    box-shadow: 0px 15px 68px 0px rgba(0, 0, 0, 0.24);
     height: 100%;
-    overflow: scroll;
-    background-color:#ededed;
-    //整个文章部分
-    .page{
-        background-color: #ffffff;
-        box-shadow: 0px 15px 68px 0px 
-                rgba(0, 0, 0, 0.24);
-        height: 100%;
-        //header
-        header{
-            display: flex;
-            padding: 0px 20px;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid @baseNavColor;
-            border-radius: 4px;
-            .title{
-                font-family: SnellRoundhand;
-                font-size: 60px;
-                font-weight: normal;
-                font-stretch: normal;
-                letter-spacing: 0px;
-                color: @baseTextColor;
-            }
-            //头导航样式开始
-            .navigation{
-                a{
-                    width: 52px;
-                    height: 26px;
-                    font-family: DFWaWaSC-W5;
-                    font-size: 20px;
-                    font-weight: normal;
-                    font-stretch: normal;
-                    line-height: 126px;
-                    letter-spacing: 0px;
-                    color: @baseNavColor;
-                    text-decoration: none;
-                    margin-right: 18px;
-                }
-                a:active,a:hover{
-                    color: @baseTextColor;
-                }
-            }
-            .navigation::after{
-                content: "";
-                width: 220px;
-                border: 1px solid;
-                display: block;
-                position: relative;
-                top: -45px;
-                right: 1px;
-            }
-            .navigation::before{
-                content: "";
-                width: 220px;
-                border: 1px solid;
-                display: block;
-                position: relative;
-                top: 48px;
-                right: 17px;
-            }
-            //头导航样式结束
-       
+
+    //header
+    header {
+      display: flex;
+      padding: 0px 20px;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid @baseNavColor;
+      border-radius: 4px;
+
+      .title {
+        font-family: SnellRoundhand;
+        font-size: 60px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: @baseTextColor;
+      }
+
+      //头导航样式开始
+      .navigation {
+        a {
+          width: 52px;
+          height: 26px;
+          font-family: DFWaWaSC-W5;
+          font-size: 20px;
+          font-weight: normal;
+          font-stretch: normal;
+          line-height: 126px;
+          letter-spacing: 0px;
+          color: @baseNavColor;
+          text-decoration: none;
+          margin-right: 18px;
         }
-        .content{
-            height: 100vh;
-            display: flex;
-             //侧边栏样式
-             .sidebar{
-                width: 200px;
-                background-color: #ffffff;
-                box-shadow: 0px 15px 68px 0px rgba(0, 0, 0, 0.05);
-                // height: calc(100% - 130px);
-                    // display: flex;
-                    // flex-direction: column;
-                    // justify-content: space-between;
-                    section{
-                        // height: 33%;
-                        margin: 20px;
-                        display: flex;
-                        flex-direction: column;
-                        section{
-                            margin: 0px;
-                        }
-                    }
-            }
-            .contentPage{
-                margin: 8px;
-                width: 100%;
-                // height: 0px;
-                overflow: auto;
-            }
+
+        a:active,
+        a:hover {
+          color: @baseTextColor;
         }
+      }
+
+      .navigation::after {
+        content: "";
+        width: 220px;
+        border: 1px solid;
+        display: block;
+        position: relative;
+        top: -45px;
+        right: 1px;
+      }
+
+      .navigation::before {
+        content: "";
+        width: 220px;
+        border: 1px solid;
+        display: block;
+        position: relative;
+        top: 48px;
+        right: 17px;
+      }
+
+      //头导航样式结束
+
     }
+
+    .content {
+      display: flex;
+
+      //侧边栏样式
+      .sidebar {
+        .recently {
+          margin: 20px;
+          flex-direction: column;
+
+          section {
+            margin-left: 10px;
+            display: flex;
+            flex-direction: column;
+          }
+        }
+
+        width: 200px;
+        background-color: #ffffff;
+        box-shadow: 0px 15px 68px 0px rgba(0, 0, 0, 0.05);
+
+        // height: calc(100% - 130px);
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: space-between;
+        section {
+          // height: 33%;
+          margin: 20px;
+          display: flex;
+          flex-wrap: wrap;
+
+          section {
+            margin: 0px;
+
+            div {
+              margin: 3px;
+            }
+          }
+        }
+      }
+
+      .contentPage {
+        margin: 8px;
+        width: 100%;
+        // height: 0px;
+        overflow: auto;
+      }
+    }
+  }
 }

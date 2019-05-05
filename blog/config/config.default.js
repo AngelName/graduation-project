@@ -8,7 +8,11 @@ module.exports = appInfo => {
 
   // add your config here
   config.middleware = ['cors'];
-
+  config.security = {
+    csrf: {
+      enable: false,
+    },
+  }
   config.mysql = {
     // 单数据库信息配置
     client: {

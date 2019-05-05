@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import  MarkdownIt from 'markdown-it'
 import twemoji from 'twemoji'
 import emoji  from 'markdown-it-emoji'
-import styles from './add.less';
 import imsize from 'markdown-it-imsize'
-import Comments from '@/components/Comment';
+import Comments from './Comment';
 import _ from 'lodash'
 import { connect } from 'dva';
 import { Comment, Avatar, Form, Button, List,Input, Select, Icon } from 'antd'
+import styles from './show.less'
 const text = `---
 __Advertisement :)__
 
@@ -271,16 +271,24 @@ export default class add extends Component {
      this.md.renderer.rules.emoji = function(token, idx) {
       return twemoji.parse(token[idx].content);
     };
+    const { dispatch,location } = this.props;
        this.state={
-         result : this.md.render(text)
+        result : this.md.render(location.state.data.content)
        }
   }
+  componentDidUpdate=(next)=>{
+    const { dispatch,location } = this.props;
+    const {state} = location;
+    if(this.props.location!==next.location){
+      this.setState({
+        result : this.md.render(state.data.content)
+      })
+    }
+  
+  
+  }
   componentDidMount = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type:"global/setDisplayFooter",
-      payload:false,
-    })    
+ 
   }
   componentWillUnmount = () =>{
     const { dispatch } = this.props;
@@ -292,11 +300,14 @@ export default class add extends Component {
 
 
   render() {
+    const { dispatch,location } = this.props;
+    const {state} = location;
+    console.log(this.props,'dddd')
     return (
       <div className={styles.box}>
-      <div ref="view" className={styles.viewer} style={{"padding":"20px"}} dangerouslySetInnerHTML={{__html:this.state.result}} >
+      <div ref="view" className={styles.viewer} style={{"padding":"40px"}} dangerouslySetInnerHTML={{__html:this.state.result}} >
       </div>
-<Comments></Comments>
+        <Comments data={state.data}></Comments>
       </div>
       
     )
