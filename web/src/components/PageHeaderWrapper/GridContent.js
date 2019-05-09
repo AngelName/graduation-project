@@ -9,7 +9,7 @@ class GridContent extends PureComponent {
     if (contentWidth === 'Fixed') {
       className = `${styles.main} ${styles.wide}`;
     }
-    return <div className={className}>{children}</div>;
+    return <div className={className} style={{padding:'20px'}}>{children}</div>;
   }
 }
 

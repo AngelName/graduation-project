@@ -27,11 +27,11 @@ class Analysis extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    this.reqRef = requestAnimationFrame(() => {
-      dispatch({
-        type: 'chart/fetch',
-      });
-    });
+    // this.reqRef = requestAnimationFrame(() => {
+    //   dispatch({
+    //     type: 'chart/fetch',
+    //   });
+    // });
   }
 
   componentWillUnmount() {
@@ -130,7 +130,7 @@ class Analysis extends Component {
     const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
 
     return (
-      <GridContent>
+      <GridContent styles={{padding:'20px'}}>
         <Suspense fallback={<PageLoading />}>
           <IntroduceRow loading={loading} visitData={visitData} />
         </Suspense>
@@ -142,39 +142,6 @@ class Analysis extends Component {
             handleRangePickerChange={this.handleRangePickerChange}
             loading={loading}
             selectDate={this.selectDate}
-          />
-        </Suspense>
-        <Row gutter={24}>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Suspense fallback={null}>
-              <TopSearch
-                loading={loading}
-                visitData2={visitData2}
-                selectDate={this.selectDate}
-                searchData={searchData}
-                dropdownGroup={dropdownGroup}
-              />
-            </Suspense>
-          </Col>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Suspense fallback={null}>
-              <ProportionSales
-                dropdownGroup={dropdownGroup}
-                salesType={salesType}
-                loading={loading}
-                salesPieData={salesPieData}
-                handleChangeSalesType={this.handleChangeSalesType}
-              />
-            </Suspense>
-          </Col>
-        </Row>
-        <Suspense fallback={null}>
-          <OfflineData
-            activeKey={activeKey}
-            loading={loading}
-            offlineData={offlineData}
-            offlineChartData={offlineChartData}
-            handleTabChange={this.handleTabChange}
           />
         </Suspense>
       </GridContent>

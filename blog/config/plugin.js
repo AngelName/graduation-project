@@ -6,3 +6,7 @@ exports.mysql = {
   enable: true,
   package: 'egg-mysql',
 };
+exports.eggSvgCaptcha = {
+  enable: true,
+  package: 'egg-svg-captcha',
+};

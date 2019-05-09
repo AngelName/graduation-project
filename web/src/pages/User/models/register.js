@@ -1,6 +1,7 @@
 import { fakeRegister } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
 import { reloadAuthorized } from '@/utils/Authorized';
+import { message } from 'antd';
 
 export default {
   namespace: 'register',
@@ -12,6 +13,11 @@ export default {
   effects: {
     *submit({ payload }, { call, put }) {
       const response = yield call(fakeRegister, payload);
+      console.log(response)
+      if(!response.data){
+        message.error(response.msg)
+
+      }
       yield put({
         type: 'registerHandle',
         payload: response,
@@ -21,11 +27,9 @@ export default {
 
   reducers: {
     registerHandle(state, { payload }) {
-      setAuthority('user');
-      reloadAuthorized();
       return {
         ...state,
-        status: payload.status,
+        status: payload,
       };
     },
   },

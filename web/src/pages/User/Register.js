@@ -3,8 +3,10 @@ import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import router from 'umi/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
+import { Form, Input, Button, Select, Row, Col, Popover, Progress,message } from 'antd';
 import styles from './Register.less';
+import request from '@/utils/request';
+import { Redirect } from 'dva/router';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -67,14 +69,15 @@ class Register extends Component {
 
   onGetCaptcha = () => {
     let count = 59;
-    this.setState({ count });
-    this.interval = setInterval(() => {
-      count -= 1;
-      this.setState({ count });
-      if (count === 0) {
-        clearInterval(this.interval);
-      }
-    }, 1000);
+   this.refs.img.src= "http://127.0.0.1:7001/verify/"+Date.now()
+    // this.setState({ count });
+    // this.interval = setInterval(() => {
+    //   count -= 1;
+    //   this.setState({ count });
+    //   if (count === 0) {
+    //     clearInterval(this.interval);
+    //   }
+    // }, 1000);
   };
 
   getPasswordStatus = () => {
@@ -174,7 +177,12 @@ class Register extends Component {
   };
 
   render() {
-    const { form, submitting } = this.props;
+    const status=this.props.register.status;
+   if(status && status.data){
+     message.success('注册成功')
+     return <Redirect to="/login"></Redirect>
+   }
+    const { form, submitting,register } = this.props;
     const { getFieldDecorator } = form;
     const { count, prefix, help, visible } = this.state;
     return (
@@ -184,7 +192,7 @@ class Register extends Component {
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('user_name', {
               rules: [
                 {
                   required: true,
@@ -249,40 +257,10 @@ class Register extends Component {
               />
             )}
           </FormItem>
-          <FormItem>
-            <InputGroup compact>
-              <Select
-                size="large"
-                value={prefix}
-                onChange={this.changePrefix}
-                style={{ width: '20%' }}
-              >
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-              </Select>
-              {getFieldDecorator('mobile', {
-                rules: [
-                  {
-                    required: true,
-                    message: formatMessage({ id: 'validation.phone-number.required' }),
-                  },
-                  {
-                    pattern: /^\d{11}$/,
-                    message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
-                  },
-                ],
-              })(
-                <Input
-                  size="large"
-                  style={{ width: '80%' }}
-                  placeholder={formatMessage({ id: 'form.phone-number.placeholder' })}
-                />
-              )}
-            </InputGroup>
-          </FormItem>
-          <FormItem>
+         <FormItem>
             <Row gutter={8}>
-              <Col span={16}>
+              <Col span={8}>
+             
                 {getFieldDecorator('captcha', {
                   rules: [
                     {
@@ -297,6 +275,8 @@ class Register extends Component {
                   />
                 )}
               </Col>
+            <Col span={8}><img height={40} ref="img" src="http://127.0.0.1:7001/verify/12"></img>
+            </Col>
               <Col span={8}>
                 <Button
                   size="large"
@@ -321,7 +301,7 @@ class Register extends Component {
             >
               <FormattedMessage id="app.register.register" />
             </Button>
-            <Link className={styles.login} to="/User/Login">
+            <Link className={styles.login} to="/login">
               <FormattedMessage id="app.register.sign-in" />
             </Link>
           </FormItem>

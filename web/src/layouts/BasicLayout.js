@@ -19,9 +19,9 @@ import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
 import { title } from '../defaultSettings';
 import styles from './BasicLayout.less';
-
+import { Redirect } from 'dva/router';
+import cookie from 'cookie'
 // lazy load SettingDrawer
-const SettingDrawer = React.lazy(() => import('@/components/SettingDrawer'));
 
 const { Content } = Layout;
 
@@ -147,10 +147,10 @@ class BasicLayout extends React.PureComponent {
   renderSettingDrawer = () => {
     // Do not render SettingDrawer in production
     // unless it is deployed in preview.pro.ant.design as demo
-    if (process.env.NODE_ENV === 'production' && APP_TYPE !== 'site') {
+    // if (process.env.NODE_ENV === 'production' && APP_TYPE !== 'site') {
       return null;
-    }
-    return <SettingDrawer />;
+    // }
+    // return <SettingDrawer />;
   };
 
   render() {
@@ -166,7 +166,10 @@ class BasicLayout extends React.PureComponent {
       fixedHeader,
       global:{displayFooter}
     } = this.props;
-    console.log(displayFooter)
+    if(!cookie.parse(document.cookie).user_id){
+      return <Redirect to="/login"></Redirect>
+    }
+    console.log(menuData,'aaa')
     const isTop = PropsLayout === 'topmenu';
     const routerConfig = this.getRouterAuthority(pathname, routes);
     const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
@@ -221,12 +224,13 @@ class BasicLayout extends React.PureComponent {
   }
 }
 
-export default connect(({ global, setting, menu }) => ({
+export default connect(({ global,login, setting, menu }) => ({
   collapsed: global.collapsed,
   layout: setting.layout,
   menuData: menu.menuData,
   breadcrumbNameMap: menu.breadcrumbNameMap,
   global,
+  login,
   ...setting,
 }))(props => (
   <Media query="(max-width: 599px)">

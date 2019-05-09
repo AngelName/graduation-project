@@ -5,6 +5,11 @@ export default [
     routes: [
       // dashboard
       {
+            path: '/manage',
+    redirect: '/manage/list',
+
+      },
+      {
         path: '/manage/list',
         name: '博客管理',
         icon: 'dashboard',
@@ -22,7 +27,7 @@ export default [
         path: '/manage/test',
         icon: 'form',
         name: '报表查看',
-        component:"./page/show"
+        component:"./Dashboard/Analysis"
 
       },
        // forms
@@ -33,16 +38,21 @@ export default [
         component:"./Comment/manage"
 
       },// forms
-      {
-       path: '/manage/account',
-       icon: 'form',
-       name: '账号管理',
-       component:"./Account/manage"
-
-     },
+    
     ]
     },
+    {
+      path: '/login',
+      name: '登陆',
+      component:"./User/login"
 
+    },
+    {
+      path: '/register',
+      name: '登陆',
+      component:"./User/register"
+
+    },
   // home
   {
   

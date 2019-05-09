@@ -4,7 +4,9 @@ const Controller = require('egg').Controller;
 const r = require('../util/r')
 class HomeController extends Controller {
   async get() {
-    r.data=await this.service.comment.get()
+    let { current=1,pageSize=10 } = this.ctx.query;
+console.log(this.ctx.query)
+    r.data=await this.service.comment.get({...this.ctx.query})
     this.ctx.body = r;
 
   }
@@ -20,7 +22,9 @@ class HomeController extends Controller {
   async delete(){
     let { ctx,service } = this;
     let { id } = ctx.params;
-    this.ctx.body = await this.service.page.delete(id);
+    this.app.mysql.delete('blog_comment',{id:id})
+    this.ctx.body = "删除成功"
+
   }
 
  
@@ -34,8 +38,6 @@ class HomeController extends Controller {
 
   async add(){
     let params = this.ctx.request.body;
-    console.log(this.ctx.request.body)
-    
     this.ctx.body = await this.service.comment.add({...params})
   }
 }

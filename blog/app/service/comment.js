@@ -4,8 +4,9 @@ const Service = require('egg').Service;
 
 class HomeService extends Service {
 
-  async get() {
-    const results = await this.app.mysql.select('blog_comment');
+  async get({ current=1,pageSize=10 }) {
+    console.log(current,pageSize)
+    const results = await this.app.mysql.query('SELECT *,blog_comment.content as page_comment, blog_comment.id as id  from blog_comment JOIN blog_page on blog_page.id=blog_comment.page_id limit ?,?',[((current-1)*pageSize), pageSize*1]);
     return results;
   }
   async getByPage(page_id){

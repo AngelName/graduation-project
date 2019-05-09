@@ -62,7 +62,6 @@ const filterMenuData = menuData => {
   }
   return menuData
     .filter(item => item.name && !item.hideInMenu)
-    .map(item => check(item.authority, getSubMenu(item)))
     .filter(item => item);
 };
 /**
@@ -98,7 +97,7 @@ export default {
   effects: {
     *getMenuData({ payload }, { put }) {
       const { routes, authority } = payload;
-      const menuData = filterMenuData(memoizeOneFormatter(routes, authority));
+      const menuData = filterMenuData(memoizeOneFormatter(routes, true));
       const breadcrumbNameMap = memoizeOneGetBreadcrumbNameMap(menuData);
       yield put({
         type: 'save',

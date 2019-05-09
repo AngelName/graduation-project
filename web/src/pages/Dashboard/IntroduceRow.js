@@ -21,19 +21,12 @@ const IntroduceRow = memo(({ loading, visitData }) => (
     <Col {...topColResponsiveProps}>
       <ChartCard
         bordered={false}
-        title={<FormattedMessage id="app.analysis.total-sales" defaultMessage="Total Sales" />}
-        action={
-          <Tooltip
-            title={<FormattedMessage id="app.analysis.introduce" defaultMessage="Introduce" />}
-          >
-            <Icon type="info-circle-o" />
-          </Tooltip>
-        }
+        title={"总文章数"}
         loading={loading}
-        total={() => <Yuan>126560</Yuan>}
+        total={123123+'个'}
         footer={
           <Field
-            label={<FormattedMessage id="app.analysis.day-sales" defaultMessage="Daily Sales" />}
+            label={"今日增加"}
             value={`￥${numeral(12423).format('0,0')}`}
           />
         }

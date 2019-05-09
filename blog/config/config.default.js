@@ -13,6 +13,11 @@ module.exports = appInfo => {
       enable: false,
     },
   }
+  config.eggSvgCaptcha = {
+    width: 256, // width of captcha
+    height: 60, // height of captcha
+    fontSize: 57,
+  };
   config.mysql = {
     // 单数据库信息配置
     client: {
