@@ -67,7 +67,10 @@ class Manage  extends React.Component {
       title: '内容',
       dataIndex: 'content',
       key: 'content',
-      render: text => <a href="javascript:;">{text}</a>,
+      width: 400,
+      render: text =>    <div style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}> 
+   {text.substring(0,100)}
+    </div> ,
     },
     {
       title: '浏览次数',

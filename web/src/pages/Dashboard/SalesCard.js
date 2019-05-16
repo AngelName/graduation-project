@@ -8,13 +8,6 @@ import { Bar } from '@/components/Charts';
 const { RangePicker } = DatePicker;
 const { TabPane } = Tabs;
 
-const rankingListData = [];
-for (let i = 0; i < 7; i += 1) {
-  rankingListData.push({
-    title: formatMessage({ id: 'app.analysis.test' }, { no: i }),
-    total: 323234,
-  });
-}
 const salesData = [];
 for (let i = 0; i < 12; i += 1) {
   salesData.push({
@@ -22,11 +15,9 @@ for (let i = 0; i < 12; i += 1) {
     y: Math.floor(Math.random() * 1000) + 200,
   });
 }
-const selectDate = ()=>{
 
-}
 const SalesCard = memo(
-  ({ rangePickerValue, isActive, handleRangePickerChange, loading,}) => (
+  ({ rangePickerValue, isActive,salesData,rankingListData=[], handleRangePickerChange,selectDate, loading,}) => (
     <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
       <div className={styles.salesCard}>
         <Tabs
@@ -68,10 +59,7 @@ const SalesCard = memo(
               <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                 <div className={styles.salesRank}>
                   <h4 className={styles.rankingTitle}>
-                    <FormattedMessage
-                      id="app.analysis.visits-ranking"
-                      defaultMessage="Visits Ranking"
-                    />
+                   文章访问量排行榜
                   </h4>
                   <ul className={styles.rankingList}>
                     {rankingListData.map((item, i) => (

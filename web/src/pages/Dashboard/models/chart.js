@@ -29,6 +29,7 @@ for (let i = 0; i < 12; i += 1) {
     y: Math.floor(Math.random() * 1000) + 200,
   });
 }
+console.log(salesData,'sale')
 const searchData = [];
 for (let i = 0; i < 50; i += 1) {
   searchData.push({
